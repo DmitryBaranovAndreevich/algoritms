@@ -51,7 +51,7 @@ export const FibonacciPage: React.FC = () => {
       </form>
       <div className={styles.container}>
         {arr?.map((num,index) => {
-          return <Circle letter={String(num)} index={index}></Circle>
+          return <Circle letter={String(num)} index={index} key={index}></Circle>
         })}
       </div>
     </SolutionLayout>

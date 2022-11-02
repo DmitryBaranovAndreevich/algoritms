@@ -1,8 +1,8 @@
 import { swap } from "./swap";
-import { TStringAnimation } from "../types/stringAnimation"
+import { TAnimation } from "../types/animation"
 export function getAnimations(arr: Array<string>) {
   const arrCopy = [...arr];
-  const animations: Array<TStringAnimation> = [];
+  const animations: Array<TAnimation> = [];
   let l = 0;
   let r = arr.length - 1;
   while (l <= r) {

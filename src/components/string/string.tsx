@@ -6,13 +6,13 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
-import { sleep, getAnimations } from "../../services";
-import { TStringAnimation } from "../../types/stringAnimation";
+import { getAnimations, parseAnimations } from "../../services";
+import { TAnimation } from "../../types/animation";
 
 export const StringComponent: React.FC = () => {
   const [isAnimation,setIsAnimation] = useState(false);
   const { values, handleChange } = useForm({ inputString: "" });
-  const [{ type, data, arr }, setArr] = useState<TStringAnimation>({
+  const [{ type, data, arr }, setArr] = useState<TAnimation>({
     type: "",
     data: [],
     arr: [],
@@ -21,22 +21,11 @@ export const StringComponent: React.FC = () => {
   async function formSubmit(e: FormEvent) {
     e.preventDefault();
     setIsAnimation(true);
-    const wordToArr = values.inputString.split("");
+    const wordToArr = (values.inputString as string).split("");
     setArr({ type: "", data: [], arr: wordToArr });
     let animations = getAnimations(wordToArr);
-    await parseAnimations(animations);
+    await parseAnimations(animations,setArr,1000);
     setIsAnimation(false);
-  }
-
-  async function parseAnimations(animations: Array<TStringAnimation>) {
-
-    for (let animation of animations) {
-      await sleep(1000);
-      setArr((priv) => {
-        priv = animation;
-        return priv;
-      });
-    }
   }
 
   return (
@@ -58,13 +47,13 @@ export const StringComponent: React.FC = () => {
           const [l, r] = data as Array<number>;
           let color = ElementStates.Default;
           if (type === "select") {
-            if (l == index || r == index) color = ElementStates.Changing;
+            if (l === index || r === index) color = ElementStates.Changing;
             if (l > index || r < index) color = ElementStates.Modified;
           }
           if (type === "swap") {
             if (l >= index || r <= index) color = ElementStates.Modified;
           }
-          return <Circle letter={el} key={index} state={color}></Circle>;
+          return <Circle letter={String(el)} key={index} state={color}></Circle>;
         })}
       </div>
     </SolutionLayout>
