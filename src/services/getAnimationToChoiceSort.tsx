@@ -22,13 +22,8 @@ export function getAnimationToChoiceSort(arr: Array<number>, sortFlag: string) {
     }
     if (min !== i) {
       swap(arrCopy, i, min);
-      if (i >= arr.length - 2)
-        animations.push({ type: "swap", data: [i, min], arr: [...arrCopy] });
-    } else {
-      if (i >= arr.length - 2)
-        animations.push({ type: "swap", data: [i, min], arr: [...arrCopy] });
     }
   }
-
+ animations.push({ type: "swap", data: [arr.length - 2, arr.length - 1], arr: [...arrCopy] });
   return animations;
 }

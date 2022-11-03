@@ -6,4 +6,6 @@ export * from "./randomArr";
 export * from "./parseAnimation";
 export * from "./getAnimationToChoiceSort";
 export * from "./getAnimationToBubbleSort";
+export * from "./stack";
+export * from "./node";
 
