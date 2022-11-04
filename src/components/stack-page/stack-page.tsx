@@ -17,7 +17,6 @@ export const StackPage: React.FC = () => {
     type: string;
     arr: Array<typeof values.inputString>;
   }>({ type: "", arr: [] });
-  const [isLoad, seIsLoad] = useState(false);
 
   async function renderAnimation(
     arr1: Array<typeof values.inputString>,
@@ -36,7 +35,6 @@ export const StackPage: React.FC = () => {
       const arr = stackToArr(stack?.top);
       renderAnimation(arr, arr);
     } else setArr({ type: "", arr: [] });
-    console.log(arr);
   }
 
   async function delNode() {

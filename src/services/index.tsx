@@ -8,4 +8,5 @@ export * from "./getAnimationToChoiceSort";
 export * from "./getAnimationToBubbleSort";
 export * from "./stack";
 export * from "./node";
+export * from "./queue";
 
