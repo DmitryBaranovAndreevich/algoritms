@@ -15,7 +15,7 @@ export const QueuePage: React.FC = () => {
     type: string;
     arr: Array<typeof values.inputNumber | null>;
     num: number | null;
-  }>({ type: "finish", arr: [...queue.container], num: null });
+  }>({ type: "finish", arr: [...queue.getArr()], num: null });
   const [isStart, setIsStart] = useState(false);
   const [isAddValue, setIsAddValue] = useState(false);
 
@@ -34,19 +34,19 @@ export const QueuePage: React.FC = () => {
   async function addElement() {
     setIsAddValue(true);
     const addValue = values.inputNumber;
-    const arr1 = [...queue.container];
+    const arr1 = [...queue.getArr()];
     const tail = queue.tail;
     queue.enqueue(addValue);
     setValues({ inputNumber: "" });
     if (!isStart) setIsStart(true);
-    await renderAnimation(arr1, queue.container, tail);
+    await renderAnimation(arr1, queue.getArr(), tail);
     setIsAddValue(false);
   }
 
   function deleteElement() {
-    const arr1 = [...queue.container];
+    const arr1 = [...queue.getArr()];
     const head = queue.head;
-    renderAnimation(arr1, queue.container, head, queue.dequeue);
+    renderAnimation(arr1, queue.getArr(), head, queue.dequeue);
   }
 
   function clear() {

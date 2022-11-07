@@ -25,9 +25,8 @@ export const FibonacciPage: React.FC = () => {
       await sleep(1000);
       const num = fibonacci(i);
       setArr((priv) => {
-        return [...priv, num]
+        return [...priv, num];
       });
-
     }
   }
   return (
@@ -46,12 +45,18 @@ export const FibonacciPage: React.FC = () => {
           type={"submit"}
           text={"Раccчитать"}
           isLoader={isAnimation}
-          disabled={Number(values.inputNumber) > 19||Number(values.inputNumber) < 0? true: false}
+          disabled={
+            Number(values.inputNumber) > 19 || Number(values.inputNumber) < 0
+              ? true
+              : false
+          }
         ></Button>
       </form>
       <div className={styles.container}>
-        {arr?.map((num,index) => {
-          return <Circle letter={String(num)} index={index} key={index}></Circle>
+        {arr?.map((num, index) => {
+          return (
+            <Circle letter={String(num)} index={index} key={index}></Circle>
+          );
         })}
       </div>
     </SolutionLayout>

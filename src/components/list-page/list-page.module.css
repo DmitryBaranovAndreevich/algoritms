@@ -1,0 +1,32 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.container + .container {
+  margin-top: 40px;
+}
+
+.inputWidth {
+  max-width: 204px;
+}
+
+.buttonWidth {
+  width: 100%;
+}
+
+.circlesContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 120px;
+  gap: 25px;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}

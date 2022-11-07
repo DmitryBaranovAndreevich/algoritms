@@ -10,7 +10,7 @@ import { getAnimations, parseAnimations } from "../../services";
 import { TAnimation } from "../../types/animation";
 
 export const StringComponent: React.FC = () => {
-  const [isAnimation,setIsAnimation] = useState(false);
+  const [isAnimation, setIsAnimation] = useState(false);
   const { values, handleChange } = useForm({ inputString: "" });
   const [{ type, data, arr }, setArr] = useState<TAnimation>({
     type: "",
@@ -22,9 +22,13 @@ export const StringComponent: React.FC = () => {
     e.preventDefault();
     setIsAnimation(true);
     const wordToArr = (values.inputString as string).split("");
-    setArr({ type: "", data: [], arr: wordToArr });
-    let animations = getAnimations(wordToArr);
-    await parseAnimations(animations,setArr,1000);
+    if (wordToArr.length > 1) {
+      setArr({ type: "", data: [], arr: wordToArr });
+      let animations = getAnimations(wordToArr);
+      await parseAnimations(animations, setArr, 1000);
+    } else {
+      setArr({ type: "swap", data: [1, 1], arr: wordToArr });
+    }
     setIsAnimation(false);
   }
 
@@ -40,20 +44,26 @@ export const StringComponent: React.FC = () => {
           name={"inputString"}
           isLimitText={true}
         ></Input>
-        <Button type={"submit"} text={"Развернуть"} isLoader={isAnimation}></Button>
+        <Button
+          type={"submit"}
+          text={"Развернуть"}
+          isLoader={isAnimation}
+        ></Button>
       </form>
       <div className={styles.container}>
         {arr?.map((el, index) => {
           const [l, r] = data as Array<number>;
           let color = ElementStates.Default;
-          if (type === "select") {
+          if (type === "select" && arr.length > 1) {
             if (l === index || r === index) color = ElementStates.Changing;
             if (l > index || r < index) color = ElementStates.Modified;
           }
           if (type === "swap") {
             if (l >= index || r <= index) color = ElementStates.Modified;
           }
-          return <Circle letter={String(el)} key={index} state={color}></Circle>;
+          return (
+            <Circle letter={String(el)} key={index} state={color}></Circle>
+          );
         })}
       </div>
     </SolutionLayout>

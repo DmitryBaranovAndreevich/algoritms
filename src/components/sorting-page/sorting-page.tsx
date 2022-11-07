@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import styles from "./sorting-page.module.css";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { RadioInput } from "../ui/radio-input/radio-input";
@@ -22,6 +22,11 @@ export const SortingPage: React.FC = () => {
     data: [],
     arr: [],
   });
+
+  useEffect(() => {
+    const arr = randomArr();
+    setArr({ type: "", data: [], arr: arr });
+  }, []);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const parent = e.currentTarget.parentElement;

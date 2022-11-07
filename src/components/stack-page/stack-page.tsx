@@ -3,7 +3,7 @@ import styles from "./stack-page.module.css";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
-import { Stack, Node, sleep } from "../../services";
+import { Stack, stackToArr, sleep } from "../../services";
 import { useForm } from "../../hooks/useForm";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
@@ -31,8 +31,8 @@ export const StackPage: React.FC = () => {
     const addValue = values.inputString;
     if (addValue !== "") stack.push(addValue);
     setValues({ inputString: "" });
-    if (stack.top) {
-      const arr = stackToArr(stack?.top);
+    if (stack.getArr()) {
+      const arr = stack.getArr();
       renderAnimation(arr, arr);
     } else setArr({ type: "", arr: [] });
   }
@@ -40,8 +40,8 @@ export const StackPage: React.FC = () => {
   async function delNode() {
     const cloneArr = [...arr];
     stack.pop();
-    if (stack.top) {
-      const arr = stackToArr(stack?.top);
+    if (stack.getArr()) {
+      const arr = stack.getArr();
       renderAnimation(cloneArr, arr);
     } else {
       renderAnimation(cloneArr, []);
@@ -53,14 +53,6 @@ export const StackPage: React.FC = () => {
   function clear() {
     setStack(new Stack<typeof values.inputString>(null));
     setArr({ type: "", arr: [] });
-  }
-
-  function stackToArr<T>(top: Node<T>): Array<T> {
-    if (!top?.next) return [top.value];
-    else {
-      const value = [top.value];
-      return [...stackToArr(top?.next), ...value];
-    }
   }
 
   return (

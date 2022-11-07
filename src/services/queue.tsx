@@ -1,7 +1,7 @@
 import { IQueue } from "../types/queue";
 
 export class Queue<T> implements IQueue<T> {
-  container: (T | null)[] = [];
+  private container: (T | null)[] = [];
   head = 0;
   tail = 0;
   readonly size: number = 0;
@@ -39,4 +39,6 @@ export class Queue<T> implements IQueue<T> {
   };
 
   isEmpty = () => this.length === 0;
+
+  getArr = () => this.container as T[];
 }

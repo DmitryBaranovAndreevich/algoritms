@@ -1,8 +1,9 @@
 import { IStack } from "../types/stack";
 import { Node } from "./node";
+import { stackToArr } from "./stackToArr";
 
 export class Stack<T> implements IStack<T> {
-  top: Node<T> | null = null;
+  private top: Node<T> | null = null;
 
   constructor(node: Node<T> | null) {
     this.top = node;
@@ -29,4 +30,8 @@ export class Stack<T> implements IStack<T> {
   isEmpty = (): boolean => {
     return this.top === null;
   };
+
+  getArr = () =>{
+    return this.top?stackToArr(this.top as Node<T>):[]
+  }
 }
