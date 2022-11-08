@@ -4,6 +4,6 @@ export interface ILinkedList<T> {
   appendTail: (element: T) => void;
   removeTail: () => void;
   insertAt: (element: T, position: number) => void;
-  getSize: () => number;
-  getArr: () => Array<T>;
+  get getSize(): number;
+  get getArr(): Array<T>;
 }

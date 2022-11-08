@@ -2,12 +2,21 @@ import { ILinkedList } from "../types/linkedList";
 import { Node } from "./node";
 import { stackToArr } from "./stackToArr";
 
-export class LinkedList<T> implements ILinkedList<T> {
+export class LinkedList<T = string> implements ILinkedList<T> {
   private head: Node<T> | null;
   private size: number;
-  constructor() {
+  constructor(initArr?: Array<T>) {
     this.head = null;
     this.size = 0;
+    this.init(initArr ? initArr : []);
+  }
+
+  private init(arr: Array<T>) {
+    if (arr.length > 0) {
+      for (let num of arr) {
+        this.appendTail(num);
+      }
+    }
   }
 
   insertAt(element: T, index: number) {
@@ -58,12 +67,12 @@ export class LinkedList<T> implements ILinkedList<T> {
     this.removeElements(0);
   }
 
-  getSize() {
+  get getSize() {
     return this.size;
   }
 
   removeElements(val: number): void {
-    if (val > this.getSize() || val < 0) throw new Error("Invalid index");
+    if (val > this.size || val < 0) throw new Error("Invalid index");
     else {
       let dummyHead = new Node(0);
       dummyHead.next = this.head;
@@ -83,7 +92,7 @@ export class LinkedList<T> implements ILinkedList<T> {
     }
   }
 
-  getArr() {
+  get getArr() {
     return this.head ? (stackToArr(this.head as Node<T>) as Array<T>) : [];
   }
 }

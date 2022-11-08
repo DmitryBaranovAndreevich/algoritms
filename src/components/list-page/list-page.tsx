@@ -9,20 +9,30 @@ import { sleep } from "../../services";
 import { Circle } from "../ui/circle/circle";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { ElementStates } from "../../types/element-states";
+import { randomArr } from "../../services";
+import { ArrStyles } from "../../types/arrStyles";
 
 export const ListPage: React.FC = () => {
   const { values, handleChange, setValues } = useForm({
-    inputIndex: "",
     inputString: "",
   });
-  const [linkedList] = useState(new LinkedList());
+  const {
+    values: inputValues,
+    handleChange: inputHandleChange,
+    setValues: inputSetValues,
+  } = useForm<number>({
+    inputIndex: -1,
+  });
+  const [linkedList] = useState(
+    new LinkedList(randomArr(6).map((el) => String(el)))
+  );
   const [{ style, type, arr, value, indexEl }, setArr] = useState<{
     style?: string;
     type: string;
-    arr: Array<typeof values.inputString | null>;
-    value?: typeof values.inputString | null;
+    arr: Array<string>;
+    value: string;
     indexEl?: number | null;
-  }>({ type: "finish", arr: [] });
+  }>({ type: ArrStyles.finish, value: "", arr: [] });
   const [isAnimation, setIsAnimation] = useState(false);
   const [loader, setLoader] = useState({
     addHeadLoader: false,
@@ -32,46 +42,38 @@ export const ListPage: React.FC = () => {
     addToIndex: false,
     delToIndex: false,
   });
-
+  /* eslint-disable */
   useEffect(() => {
-    const initArr = ["0", "34", "8", "1"];
-
-    if (!linkedList.getSize()) {
-      for (let num of initArr) {
-        linkedList.appendTail(num);
-      }
-    }
-
-    const arr = linkedList.getArr();
-    setArr({ type: "finish", arr: arr as Array<string> });
+    const arr = linkedList.getArr;
+    setArr({ type: ArrStyles.finish, value: "", arr: arr });
   }, []);
-
+  /* eslint-enable */
   async function renderAnimation(
-    arr1: Array<typeof values.inputString>,
-    arr2: Array<typeof values.inputString>,
-    addElement: typeof values.inputString | null = null,
+    arr1: Array<string>,
+    arr2: Array<string>,
+    addElement: string = "",
     index: number | string,
     change: string
   ) {
     const position1 = typeof index === "number" ? index : arr1.length - 1;
     setArr({
       style: change,
-      type: "newEl",
+      type: ArrStyles.newEl,
       arr: arr1,
       value: addElement,
       indexEl: position1,
     });
-    await sleep(500);
+    await sleep();
     const position2 = typeof index === "number" ? index : arr2.length - 1;
     setArr({
       style: change,
-      type: "select",
+      type: ArrStyles.select,
       arr: arr2,
       value: addElement,
       indexEl: position2,
     });
-    await sleep(500);
-    setArr({ type: "finish", arr: arr2 });
+    await sleep();
+    setArr({ type: ArrStyles.finish, value: "", arr: arr2 });
   }
 
   async function addElement(func: Function, position: string, index: number) {
@@ -83,9 +85,9 @@ export const ListPage: React.FC = () => {
     );
     const addValue = values.inputString;
     setValues({ ...values, inputString: "" });
-    const arr1 = linkedList.getArr() as Array<typeof values.inputString>;
+    const arr1 = linkedList.getArr;
     func.call(linkedList, addValue);
-    const arr2 = linkedList.getArr() as Array<typeof values.inputString>;
+    const arr2 = linkedList.getArr;
     const positionToAnimation = position === "tail" ? position : index;
     await renderAnimation(arr1, arr2, addValue, positionToAnimation, "add");
     setIsAnimation(false);
@@ -103,17 +105,17 @@ export const ListPage: React.FC = () => {
         ? { ...loader, delHeadLoader: true }
         : { ...loader, delTailLoader: true }
     );
-    const arr1 = linkedList.getArr() as Array<typeof values.inputString>;
+    const arr1 = linkedList.getArr;
     const delValue = position === "head" ? arr1[0] : arr1[arr1.length - 1];
     func.call(linkedList);
-    const arr2 = linkedList.getArr() as Array<typeof values.inputString>;
+    const arr2 = linkedList.getArr;
     const positionToAnimation = position === "tail" ? position : 0;
     await renderAnimation(
       arr1,
       arr2,
-      delValue as string,
+      delValue,
       positionToAnimation,
-      "remove"
+      ArrStyles.remove
     );
     setIsAnimation(false);
     setLoader(
@@ -127,21 +129,22 @@ export const ListPage: React.FC = () => {
     setIsAnimation(true);
     setLoader({ ...loader, addToIndex: true });
     const addValue = values.inputString;
-    const index = Number(values.inputIndex);
-    setValues({ inputIndex: "", inputString: "" });
-    const arr1 = linkedList.getArr() as Array<typeof values.inputString>;
+    const index = Number(inputValues.inputIndex);
+    setValues({ inputString: "" });
+    inputSetValues({ inputIndex: -1 });
+    const arr1 = linkedList.getArr;
     for (let i = 0; i <= index; i++) {
       setArr({
-        style: "addToIndex",
-        type: "search",
+        style: ArrStyles.addToIndex,
+        type: ArrStyles.search,
         arr: arr1,
         value: addValue,
         indexEl: i,
       });
-      await sleep(500);
+      await sleep();
     }
-    linkedList.insertAt(addValue, linkedList.getSize() - index);
-    const arr2 = linkedList.getArr() as Array<typeof values.inputString>;
+    linkedList.insertAt(addValue, linkedList.getSize - index);
+    const arr2 = linkedList.getArr;
     await renderAnimation(arr1, arr2, addValue, index, "add");
     setIsAnimation(false);
     setLoader({ ...loader, addToIndex: false });
@@ -150,22 +153,22 @@ export const ListPage: React.FC = () => {
   async function delToIndex() {
     setIsAnimation(true);
     setLoader({ ...loader, delToIndex: true });
-    const index = Number(values.inputIndex);
-    setValues({ ...values, inputIndex: "" });
-    const arr1 = linkedList.getArr() as Array<typeof values.inputString>;
+    const index = Number(inputValues.inputIndex);
+    inputSetValues({ inputIndex: -1 });
+    const arr1 = linkedList.getArr;
     for (let i = 0; i <= index; i++) {
-      setArr({ style: "delToIndex", type: "search", arr: arr1, indexEl: i });
-      await sleep(500);
+      setArr({
+        style: ArrStyles.delToIndex,
+        value: "",
+        type: ArrStyles.search,
+        arr: arr1,
+        indexEl: i,
+      });
+      await sleep();
     }
-    linkedList.removeElements(linkedList.getSize() - index - 1);
-    const arr2 = linkedList.getArr() as Array<typeof values.inputString>;
-    await renderAnimation(
-      arr1 as Array<typeof values.inputString>,
-      arr2 as Array<typeof values.inputString>,
-      arr1[index],
-      index,
-      "remove"
-    );
+    linkedList.removeElements(linkedList.getSize - index - 1);
+    const arr2 = linkedList.getArr;
+    await renderAnimation(arr1, arr2, arr1[index], index, ArrStyles.remove);
     setIsAnimation(false);
     setLoader({ ...loader, delToIndex: false });
   }
@@ -198,22 +201,22 @@ export const ListPage: React.FC = () => {
         <Button
           text={"Удалить из head"}
           onClick={() => removeElement(linkedList.removeHead, "head")}
-          disabled={isAnimation || linkedList.getSize() === 0}
+          disabled={isAnimation || linkedList.getSize === 0}
           isLoader={loader.delHeadLoader}
         ></Button>
         <Button
           text={"Удалить из tail"}
           onClick={() => removeElement(linkedList.removeTail, "tail")}
-          disabled={isAnimation || linkedList.getSize() === 0}
+          disabled={isAnimation || linkedList.getSize === 0}
           isLoader={loader.delTailLoader}
         ></Button>
       </div>
       <div className={styles.container}>
         <Input
-          value={values.inputIndex}
+          value={inputValues.inputIndex < 0 ? "" : inputValues.inputIndex}
           type={"number"}
           placeholder={"Введите индекс"}
-          onChange={handleChange}
+          onChange={inputHandleChange}
           name={"inputIndex"}
           extraClass={styles.inputWidth}
         ></Input>
@@ -223,10 +226,8 @@ export const ListPage: React.FC = () => {
           extraClass={styles.buttonWidth}
           disabled={
             isAnimation ||
-            (values.inputIndex as unknown as number) >
-              linkedList.getSize() - 1 ||
-            (values.inputIndex as unknown as number) < 0 ||
-            values.inputIndex === "" ||
+            inputValues.inputIndex > linkedList.getSize - 1 ||
+            inputValues.inputIndex < 0 ||
             values.inputString === ""
           }
           isLoader={loader.addToIndex}
@@ -236,10 +237,8 @@ export const ListPage: React.FC = () => {
           extraClass={styles.buttonWidth}
           disabled={
             isAnimation ||
-            (values.inputIndex as unknown as number) >
-              linkedList.getSize() - 1 ||
-            (values.inputIndex as unknown as number) < 0 ||
-            values.inputIndex === ""
+            inputValues.inputIndex > linkedList.getSize - 1 ||
+            inputValues.inputIndex < 0
           }
           isLoader={loader.delToIndex}
           onClick={delToIndex}
@@ -247,32 +246,32 @@ export const ListPage: React.FC = () => {
       </div>
       <div className={styles.circlesContainer}>
         {arr.map((el, index) => {
-          let letter = String(el);
+          let letter = el;
           let head: ReactElement | string = index === 0 ? "head" : "";
           let tail: ReactElement | string =
             index === arr.length - 1 ? "tail" : "";
           let color = ElementStates.Default;
 
           if (style === "add" && index === indexEl) {
-            if (type === "newEl") {
+            if (type === ArrStyles.newEl) {
               head = (
                 <Circle
-                  letter={value as string}
+                  letter={value}
                   state={ElementStates.Changing}
                   isSmall={true}
                 ></Circle>
               );
             }
-            if (type === "select") {
+            if (type === ArrStyles.select) {
               color = ElementStates.Modified;
             }
           }
 
-          if (style === "remove" && index === indexEl) {
-            if (type === "newEl") {
+          if (style === ArrStyles.remove && index === indexEl) {
+            if (type === ArrStyles.newEl) {
               tail = (
                 <Circle
-                  letter={value as string}
+                  letter={value}
                   state={ElementStates.Changing}
                   isSmall={true}
                 ></Circle>
@@ -281,12 +280,12 @@ export const ListPage: React.FC = () => {
             }
           }
 
-          if (type === "search" && typeof indexEl === "number") {
+          if (type === ArrStyles.search && typeof indexEl === "number") {
             if (index < indexEl) color = ElementStates.Changing;
-            if (index === indexEl && style === "addToIndex")
+            if (index === indexEl && style === ArrStyles.addToIndex)
               head = (
                 <Circle
-                  letter={value as string}
+                  letter={value}
                   state={ElementStates.Changing}
                   isSmall={true}
                 ></Circle>

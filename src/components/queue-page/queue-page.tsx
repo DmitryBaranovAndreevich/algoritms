@@ -7,52 +7,56 @@ import { useForm } from "../../hooks/useForm";
 import { Queue, sleep } from "../../services";
 import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
+import { ArrStyles } from "../../types/arrStyles";
 
 export const QueuePage: React.FC = () => {
   const { values, handleChange, setValues } = useForm({ inputNumber: "" });
-  const [queue, setQueue] = useState(new Queue<typeof values.inputNumber>(7));
+  const [queue, setQueue] = useState(new Queue<string>(7));
   const [{ type, arr, num }, setArr] = useState<{
     type: string;
-    arr: Array<typeof values.inputNumber | null>;
+    arr: Array<string | null>;
     num: number | null;
-  }>({ type: "finish", arr: [...queue.getArr()], num: null });
+  }>({ type: ArrStyles.finish, arr: [...queue.getArr], num: null });
   const [isStart, setIsStart] = useState(false);
   const [isAddValue, setIsAddValue] = useState(false);
+  const [isDelValue, setIsDelValue] = useState(false);
 
   async function renderAnimation(
-    arr1: Array<typeof values.inputString | null>,
-    arr2: Array<typeof values.inputString | null>,
+    arr1: Array<string | null>,
+    arr2: Array<string | null>,
     index: number | null,
     callback?: Function
   ) {
-    setArr({ type: "select", arr: arr1, num: index });
-    await sleep(500);
+    setArr({ type: ArrStyles.select, arr: arr1, num: index });
+    await sleep();
     if (callback) callback();
-    setArr({ type: "finish", arr: arr2, num: null });
+    setArr({ type: ArrStyles.finish, arr: arr2, num: null });
   }
 
   async function addElement() {
     setIsAddValue(true);
     const addValue = values.inputNumber;
-    const arr1 = [...queue.getArr()];
+    const arr1 = [...queue.getArr];
     const tail = queue.tail;
     queue.enqueue(addValue);
     setValues({ inputNumber: "" });
     if (!isStart) setIsStart(true);
-    await renderAnimation(arr1, queue.getArr(), tail);
+    await renderAnimation(arr1, queue.getArr, tail);
     setIsAddValue(false);
   }
 
-  function deleteElement() {
-    const arr1 = [...queue.getArr()];
+  async function deleteElement() {
+    setIsDelValue(true);
+    const arr1 = [...queue.getArr];
     const head = queue.head;
-    renderAnimation(arr1, queue.getArr(), head, queue.dequeue);
+    await renderAnimation(arr1, queue.getArr, head, queue.dequeue);
+    setIsDelValue(false);
   }
 
   function clear() {
     setQueue(new Queue<typeof values.inputNumber>(7));
     setIsStart(false);
-    setArr({ type: "finish", arr: Array(7).fill(null), num: null });
+    setArr({ type: ArrStyles.finish, arr: Array(7).fill(null), num: null });
   }
 
   return (
@@ -83,7 +87,8 @@ export const QueuePage: React.FC = () => {
             type={"button"}
             text={"Удалить"}
             onClick={deleteElement}
-            disabled={queue.isEmpty() ? true : false}
+            disabled={queue.isEmpty || isDelValue}
+            isLoader={isDelValue}
           ></Button>
         </div>
         <Button type={"button"} text={"Очистить"} onClick={clear}></Button>
@@ -93,16 +98,16 @@ export const QueuePage: React.FC = () => {
           let letter = el === null ? "" : el;
           let color = ElementStates.Default;
 
-          if (index === num && type === "select") {
+          if (index === num && type === ArrStyles.select) {
             color = ElementStates.Changing;
           }
           return (
             <Circle
-              letter={String(letter)}
+              letter={letter}
               key={index}
               head={index === queue.head && isStart ? "head" : ""}
               tail={
-                index === queue.tail - 1 && isStart && !queue.isEmpty()
+                index === queue.tail - 1 && isStart && !queue.isEmpty
                   ? "tail"
                   : ""
               }

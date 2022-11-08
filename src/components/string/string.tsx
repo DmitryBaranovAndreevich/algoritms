@@ -8,12 +8,13 @@ import { Circle } from "../ui/circle/circle";
 import { ElementStates } from "../../types/element-states";
 import { getAnimations, parseAnimations } from "../../services";
 import { TAnimation } from "../../types/animation";
+import { ArrStyles } from "../../types/arrStyles";
 
 export const StringComponent: React.FC = () => {
   const [isAnimation, setIsAnimation] = useState(false);
   const { values, handleChange } = useForm({ inputString: "" });
-  const [{ type, data, arr }, setArr] = useState<TAnimation>({
-    type: "",
+  const [{ type, data, arr }, setArr] = useState<TAnimation<string>>({
+    type: ArrStyles.default,
     data: [],
     arr: [],
   });
@@ -21,13 +22,13 @@ export const StringComponent: React.FC = () => {
   async function formSubmit(e: FormEvent) {
     e.preventDefault();
     setIsAnimation(true);
-    const wordToArr = (values.inputString as string).split("");
+    const wordToArr = values.inputString.split("");
     if (wordToArr.length > 1) {
-      setArr({ type: "", data: [], arr: wordToArr });
+      setArr({ type: ArrStyles.default, data: [], arr: wordToArr });
       let animations = getAnimations(wordToArr);
-      await parseAnimations(animations, setArr, 1000);
+      await parseAnimations(animations, setArr);
     } else {
-      setArr({ type: "swap", data: [1, 1], arr: wordToArr });
+      setArr({ type: ArrStyles.swap, data: [1, 1], arr: wordToArr });
     }
     setIsAnimation(false);
   }
@@ -52,18 +53,16 @@ export const StringComponent: React.FC = () => {
       </form>
       <div className={styles.container}>
         {arr?.map((el, index) => {
-          const [l, r] = data as Array<number>;
+          const [l, r] = data;
           let color = ElementStates.Default;
-          if (type === "select" && arr.length > 1) {
+          if (type === ArrStyles.select && arr.length > 1) {
             if (l === index || r === index) color = ElementStates.Changing;
             if (l > index || r < index) color = ElementStates.Modified;
           }
-          if (type === "swap") {
+          if (type === ArrStyles.swap) {
             if (l >= index || r <= index) color = ElementStates.Modified;
           }
-          return (
-            <Circle letter={String(el)} key={index} state={color}></Circle>
-          );
+          return <Circle letter={el} key={index} state={color}></Circle>;
         })}
       </div>
     </SolutionLayout>

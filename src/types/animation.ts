@@ -1,5 +1,5 @@
-export type TAnimation = {
- type: string,
- data?: Array<number>,
- arr: Array<string|number>
-}
+export type TAnimation<T> = {
+  type: string;
+  data: Array<number>;
+  arr: Array<T>;
+};

@@ -22,23 +22,29 @@ export class Queue<T> implements IQueue<T> {
   };
 
   dequeue = () => {
-    if (this.isEmpty()) {
+    if (this.isEmpty) {
       throw new Error("No elements in the queue");
     }
     this.container[this.head % this.size] = null;
-    if(this.length > 1)this.head++;
-    else { this.tail = this.head}
+    if (this.length > 1) this.head++;
+    else {
+      this.tail = this.head;
+    }
     this.length--;
   };
 
   peak = (): T | null => {
-    if (this.isEmpty()) {
+    if (this.isEmpty) {
       throw new Error("No elements in the queue");
     }
-    return this.container[this.head % this.size]; // Ваш код
+    return this.container[this.head % this.size];
   };
 
-  isEmpty = () => this.length === 0;
+  get isEmpty() {
+    return this.length === 0;
+  }
 
-  getArr = () => this.container as T[];
+  get getArr() {
+    return this.container as T[];
+  }
 }

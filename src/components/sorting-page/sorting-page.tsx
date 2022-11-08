@@ -12,42 +12,46 @@ import {
 import { TAnimation } from "../../types/animation";
 import { Column } from "../ui/column/column";
 import { ElementStates } from "../../types/element-states";
+import { ArrStyles } from "../../types/arrStyles";
+import { SortTypes } from "../../types/sortType";
 
 export const SortingPage: React.FC = () => {
   const [isAnimation, setIsAnimation] = useState(false);
   const [loader, setLoader] = useState<string>("");
-  const [checkedInput, setCheckedInput] = useState<string>("choice");
-  const [{ type, data, arr }, setArr] = useState<TAnimation>({
-    type: "",
+  const [checkedInput, setCheckedInput] = useState<string>(SortTypes.choice);
+  const [{ type, data, arr }, setArr] = useState<TAnimation<number>>({
+    type: ArrStyles.default,
     data: [],
     arr: [],
   });
 
   useEffect(() => {
     const arr = randomArr();
-    setArr({ type: "", data: [], arr: arr });
+    setArr({ type: ArrStyles.default, data: [], arr: arr });
   }, []);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const parent = e.currentTarget.parentElement;
-    if (parent?.classList.contains("bubble")) setCheckedInput("bubble");
-    else if (parent?.classList.contains("choice")) setCheckedInput("choice");
+    if (parent?.classList.contains(SortTypes.bubble))
+      setCheckedInput(SortTypes.bubble);
+    else if (parent?.classList.contains(SortTypes.choice))
+      setCheckedInput(SortTypes.choice);
   }
 
   async function createArr(e: FormEvent) {
     e.preventDefault();
     const arr = randomArr();
-    setArr({ type: "", data: [], arr: arr });
+    setArr({ type: ArrStyles.default, data: [], arr: arr });
   }
 
   async function startAnimation(sortFlag: string) {
     setIsAnimation(true);
     setLoader(sortFlag);
     let animation;
-    if (checkedInput === "choice")
-      animation = getAnimationToChoiceSort(arr as Array<number>, sortFlag);
-    if (checkedInput === "bubble")
-      animation = getAnimationToBubbleSort(arr as Array<number>, sortFlag);
+    if (checkedInput === SortTypes.choice)
+      animation = getAnimationToChoiceSort(arr, sortFlag);
+    if (checkedInput === SortTypes.bubble)
+      animation = getAnimationToBubbleSort(arr, sortFlag);
     if (animation) await parseAnimations(animation, setArr, 400);
     setIsAnimation(false);
     setLoader("");
@@ -59,36 +63,36 @@ export const SortingPage: React.FC = () => {
         <div className={styles.container}>
           <RadioInput
             label={"Выбор"}
-            checked={checkedInput === "choice" ? true : false}
+            checked={checkedInput === SortTypes.choice ? true : false}
             name={"radio"}
             onChange={handleChange}
-            extraClass={"choice"}
+            extraClass={SortTypes.choice}
           ></RadioInput>
           <RadioInput
             label={"Пузырёк"}
-            checked={checkedInput === "bubble" ? true : false}
+            checked={checkedInput === SortTypes.bubble ? true : false}
             name={"radio"}
             onChange={handleChange}
-            extraClass={"bubble"}
+            extraClass={SortTypes.bubble}
           ></RadioInput>
           <div className={styles.buttonContainer}>
             <Button
               text={"По возрастанию"}
               type={"button"}
               onClick={() => {
-                startAnimation("up");
+                startAnimation(SortTypes.up);
               }}
               disabled={isAnimation}
-              isLoader={loader === "up" ? true : false}
+              isLoader={loader === SortTypes.up ? true : false}
             ></Button>
             <Button
               text={"По убыванию"}
               type={"button"}
               onClick={() => {
-                startAnimation("down");
+                startAnimation(SortTypes.down);
               }}
               disabled={isAnimation}
-              isLoader={loader === "down" ? true : false}
+              isLoader={loader === SortTypes.down ? true : false}
             ></Button>
           </div>
         </div>
@@ -100,24 +104,24 @@ export const SortingPage: React.FC = () => {
         ></Button>
       </div>
       <div className={styles.columnContainer}>
-        {arr?.map((el, index) => {
-          const [l, r, last] = data as Array<number>;
+        {arr.map((el, index) => {
+          const [l, r, last] = data;
           let color = ElementStates.Default;
-          if (type === "select") {
+          if (type === ArrStyles.select) {
             if (l === index || r === index) color = ElementStates.Changing;
-            if (l > index && checkedInput === "choice")
+            if (l > index && checkedInput === SortTypes.choice)
               color = ElementStates.Modified;
-            if (last < index && checkedInput === "bubble")
+            if (last < index && checkedInput === SortTypes.bubble)
               color = ElementStates.Modified;
           }
-          if (type === "swap") {
+          if (type === ArrStyles.swap) {
             const max = Math.max(l, r);
-            if (max >= index && checkedInput === "choice")
+            if (max >= index && checkedInput === SortTypes.choice)
               color = ElementStates.Modified;
-            if (last <= index && checkedInput === "bubble")
+            if (last <= index && checkedInput === SortTypes.bubble)
               color = ElementStates.Modified;
           }
-          return <Column index={Number(el)} key={index} state={color}></Column>;
+          return <Column index={el} key={index} state={color}></Column>;
         })}
       </div>
     </SolutionLayout>
