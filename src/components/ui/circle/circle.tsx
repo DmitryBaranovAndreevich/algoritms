@@ -40,6 +40,7 @@ export const Circle: React.FC<CircleProps> = ({
       >
         <p
           className={`text text_type_circle text_color_input ${styles.letter}`}
+          data-testid="circle_text_container"
         >
           {letter}
         </p>

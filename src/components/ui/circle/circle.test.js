@@ -1,5 +1,4 @@
 import renderer from "react-test-renderer";
-import { render, screen, fireEvent } from "@testing-library/react";
 import { Circle } from "./circle";
 
 it("Пустой компонент Circle рендерится без ошибок", () => {
