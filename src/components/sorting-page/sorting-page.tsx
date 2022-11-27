@@ -14,12 +14,13 @@ import { Column } from "../ui/column/column";
 import { ElementStates } from "../../types/element-states";
 import { ArrStyles } from "../../types/arrStyles";
 import { SortTypes } from "../../types/sortType";
+import { useStateIfMounted } from "use-state-if-mounted";
 
 export const SortingPage: React.FC = () => {
-  const [isAnimation, setIsAnimation] = useState(false);
-  const [loader, setLoader] = useState<string>("");
+  const [isAnimation, setIsAnimation] = useStateIfMounted(false);
+  const [loader, setLoader] = useStateIfMounted<string>("");
   const [checkedInput, setCheckedInput] = useState<string>(SortTypes.choice);
-  const [{ type, data, arr }, setArr] = useState<TAnimation<number>>({
+  const [{ type, data, arr }, setArr] = useStateIfMounted<TAnimation<number>>({
     type: ArrStyles.default,
     data: [],
     arr: [],

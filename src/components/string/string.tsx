@@ -9,11 +9,12 @@ import { ElementStates } from "../../types/element-states";
 import { getAnimations, parseAnimations } from "../../services";
 import { TAnimation } from "../../types/animation";
 import { ArrStyles } from "../../types/arrStyles";
+import { useStateIfMounted } from "use-state-if-mounted";
 
 export const StringComponent: React.FC = () => {
-  const [isAnimation, setIsAnimation] = useState(false);
+  const [isAnimation, setIsAnimation] = useStateIfMounted(false);
   const { values, handleChange } = useForm({ inputString: "" });
-  const [{ type, data, arr }, setArr] = useState<TAnimation<string>>({
+  const [{ type, data, arr }, setArr] = useStateIfMounted<TAnimation<string>>({
     type: ArrStyles.default,
     data: [],
     arr: [],

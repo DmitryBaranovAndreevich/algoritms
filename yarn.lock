@@ -9405,6 +9405,11 @@ url-parse@^1.5.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
+use-state-if-mounted@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/use-state-if-mounted/-/use-state-if-mounted-1.0.7.tgz#1bb3b42d68a7fe3531b599dcfe6d60d7f0b1b5d8"
+  integrity sha512-f1uTjeGEbnw6n5D+5kxOOJJF/qSNR+os8NUjye07yk7MljnsJ4Si5/5uEPwOOiBpCw1lkgurccx3UynScrFcdA==
+
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
