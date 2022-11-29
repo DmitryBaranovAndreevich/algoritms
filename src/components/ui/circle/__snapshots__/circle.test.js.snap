@@ -9,10 +9,10 @@ exports[`changing компонент Circle  рендерится без оши�
   />
   <div
     className="circle   changing"
+    data-testid="circle_text_container"
   >
     <p
       className="text text_type_circle text_color_input letter"
-      data-testid="circle_text_container"
     />
   </div>
   <p
@@ -33,10 +33,10 @@ exports[`default компонент Circle  рендерится без ошиб
   />
   <div
     className="circle   default"
+    data-testid="circle_text_container"
   >
     <p
       className="text text_type_circle text_color_input letter"
-      data-testid="circle_text_container"
     />
   </div>
   <p
@@ -57,10 +57,10 @@ exports[`modified компонент Circle  рендерится без оши�
   />
   <div
     className="circle   modified"
+    data-testid="circle_text_container"
   >
     <p
       className="text text_type_circle text_color_input letter"
-      data-testid="circle_text_container"
     />
   </div>
   <p
@@ -81,10 +81,10 @@ exports[`small компонент Circle  рендерится без ошибо
   />
   <div
     className="circle  small default"
+    data-testid="circle_text_container"
   >
     <p
       className="text text_type_circle text_color_input letter"
-      data-testid="circle_text_container"
     />
   </div>
   <p
@@ -111,10 +111,10 @@ exports[`Компонент Circle с React element in head рендерится
       />
       <div
         className="circle   default"
+        data-testid="circle_text_container"
       >
         <p
           className="text text_type_circle text_color_input letter"
-          data-testid="circle_text_container"
         >
           X
         </p>
@@ -129,10 +129,10 @@ exports[`Компонент Circle с React element in head рендерится
   </div>
   <div
     className="circle   default"
+    data-testid="circle_text_container"
   >
     <p
       className="text text_type_circle text_color_input letter"
-      data-testid="circle_text_container"
     >
       X
     </p>
@@ -155,10 +155,10 @@ exports[`Компонент Circle с React element in tail рендерится
   />
   <div
     className="circle   default"
+    data-testid="circle_text_container"
   >
     <p
       className="text text_type_circle text_color_input letter"
-      data-testid="circle_text_container"
     >
       X
     </p>
@@ -177,10 +177,10 @@ exports[`Компонент Circle с React element in tail рендерится
       />
       <div
         className="circle   default"
+        data-testid="circle_text_container"
       >
         <p
           className="text text_type_circle text_color_input letter"
-          data-testid="circle_text_container"
         >
           X
         </p>
@@ -205,10 +205,10 @@ exports[`Компонент Circle с index рендерится без ошиб
   />
   <div
     className="circle   default"
+    data-testid="circle_text_container"
   >
     <p
       className="text text_type_circle text_color_input letter"
-      data-testid="circle_text_container"
     />
   </div>
   <p
@@ -233,10 +233,10 @@ exports[`Компонент Circle с text head рендерится без ош
   </div>
   <div
     className="circle   default"
+    data-testid="circle_text_container"
   >
     <p
       className="text text_type_circle text_color_input letter"
-      data-testid="circle_text_container"
     >
       X
     </p>
@@ -259,10 +259,10 @@ exports[`Компонент Circle с text tail рендерится без ош
   />
   <div
     className="circle   default"
+    data-testid="circle_text_container"
   >
     <p
       className="text text_type_circle text_color_input letter"
-      data-testid="circle_text_container"
     >
       X
     </p>
@@ -287,10 +287,10 @@ exports[`Компонент Circle с буквами рендерится без
   />
   <div
     className="circle   default"
+    data-testid="circle_text_container"
   >
     <p
       className="text text_type_circle text_color_input letter"
-      data-testid="circle_text_container"
     >
       X
     </p>
@@ -313,10 +313,10 @@ exports[`Пустой компонент Circle рендерится без ош
   />
   <div
     className="circle   default"
+    data-testid="circle_text_container"
   >
     <p
       className="text text_type_circle text_color_input letter"
-      data-testid="circle_text_container"
     />
   </div>
   <p

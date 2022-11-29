@@ -24,13 +24,16 @@ function checkResponce(container, inputValue) {
       const letter = el.textContent;
       return priv + letter;
     }, "");
+    console.log(word)
     expect(word).toBe([...inputValue].reverse().join(""));
   }
 }
 
-jest.useFakeTimers("modern");
+beforeAll(() => jest.useFakeTimers("modern"));
+afterAll(() => jest.useRealTimers());
+
 describe("Тест страницы с анимацией разворота строки", () => {
-  
+
   it("Разворот строки с четным кол-ом символов", async () => {
     const { container } = render(
       <BrowserRouter>

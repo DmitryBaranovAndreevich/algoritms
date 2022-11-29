@@ -50,9 +50,10 @@ export const StringComponent: React.FC = () => {
           type={"submit"}
           text={"Развернуть"}
           isLoader={isAnimation}
+          disabled={values.inputString !== "" ? false : true}
         ></Button>
       </form>
-      <div className={styles.container}>
+      <div className={styles.container} data-testid={"string-container"}>
         {arr?.map((el, index) => {
           const [l, r] = data;
           let color = ElementStates.Default;

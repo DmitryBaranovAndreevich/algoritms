@@ -46,7 +46,7 @@ export const FibonacciPage: React.FC = () => {
           text={"Раccчитать"}
           isLoader={isAnimation}
           disabled={
-            values.inputNumber > 19 || values.inputNumber < 0 ? true : false
+            values.inputNumber > 19 || values.inputNumber <= 0 ? true : false
           }
         ></Button>
       </form>

@@ -7,6 +7,10 @@ import {
 } from "@testing-library/react";
 import { SortingPage } from "./sorting-page";
 import { BrowserRouter } from "react-router-dom";
+import {
+  getAnimationToBubbleSort,
+  getAnimationToChoiceSort,
+} from "../../services";
 
 function getArray(container) {
   return getAllByTestId(container, "column").map((el) =>
@@ -23,9 +27,11 @@ function compareArrs(arr1, arr2) {
 
   return true;
 }
-jest.useFakeTimers("modern");
+
+beforeAll(() => jest.useFakeTimers("modern"));
+afterAll(() => jest.useRealTimers());
+
 describe("Тест страницы сортировки массива", () => {
-  
   it("Сортировка выбором по возрастанию", async () => {
     const { container } = render(
       <BrowserRouter>
@@ -126,5 +132,29 @@ describe("Тест страницы сортировки массива", () => 
         timeout: startArr.length * startArr.length * 500,
       }
     );
+  });
+
+  it("Тест алгоритма сортировки выбором с один элементом", () => {
+    const arr = [1];
+    const sortArr = getAnimationToChoiceSort(arr, "up");
+    expect(compareArrs(arr, sortArr[sortArr.length - 1].arr)).toBe(true);
+  });
+
+  it("Тест алгоритма сортровки выбором без элементов", () => {
+    const arr = [];
+    const sortArr = getAnimationToChoiceSort(arr, "up");
+    expect(compareArrs(arr, sortArr[sortArr.length - 1].arr)).toBe(true);
+  });
+
+  it("Тест алгоритма сортировки пузырьком с один элементом", () => {
+    const arr = [1];
+    const sortArr = getAnimationToBubbleSort(arr, "up");
+    expect(compareArrs(arr, sortArr[sortArr.length - 1].arr)).toBe(true);
+  });
+
+  it("Тест алгоритма сортровки пузырьком без элементов", () => {
+    const arr = [];
+    const sortArr = getAnimationToBubbleSort(arr, "up");
+    expect(compareArrs(arr, sortArr[sortArr.length - 1].arr)).toBe(true);
   });
 });
