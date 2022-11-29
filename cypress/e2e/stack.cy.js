@@ -1,4 +1,5 @@
 describe("проверка анимации работы стека", () => {
+  const count = 6;
   const stack = [];
   before(function () {
     cy.visit("http://localhost:3000");
@@ -14,7 +15,7 @@ describe("проверка анимации работы стека", () => {
     cy.contains("button", "Добавить").as("add");
     cy.get("input").as("input");
     // тестируем добавление 6 случайных элементов
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < count; i++) {
       const el = Math.floor(Math.random() * 19 + 1);
       let arr = [];
       cy.get("@input").type(el);
@@ -117,10 +118,10 @@ describe("проверка анимации работы стека", () => {
   it("проверка анимации удаления элемента из стека", () => {
     cy.clock();
     cy.contains("button", "Удалить").as("delete");
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < count; i++) {
       let arr = [];
       cy.get("@delete").click();
-      if (i === 5) {
+      if (i === count - 1) {
         //  первый элемент с фиолетовой рамкой перед удалением
         cy.get('div[data-testid = "circle_text_container"]')
           .prev()
@@ -140,7 +141,7 @@ describe("проверка анимации работы стека", () => {
         cy.tick(500);
       } else {
         // кандидат на удаление подсвечивается фиолетовым
-        for (let j = 0; j < 6 - i; j++) {
+        for (let j = 0; j < count - i; j++) {
           arr.push(
             cy
               .get('div[data-testid = "circle_text_container"]')
@@ -175,10 +176,28 @@ describe("проверка анимации работы стека", () => {
         // проверяем удаление 1 элемента
         cy.get('div[data-testid = "circle_text_container"]').should(
           "have.length",
-          5 - i
+          count - 1 - i
         );
         stack.pop();
       }
     }
+  });
+
+  it("по нажатию на кнопку очистить весь стек очищается", function () {
+    cy.clock();
+    cy.contains("button", "Добавить").as("add");
+    cy.contains("button", "Очистить").as("clear");
+    cy.get("input").as("input");
+    for (let i = 0; i < count; i++) {
+      const el = Math.floor(Math.random() * 19 + 1);
+      cy.get("@input").type(el);
+      cy.get("@add").click();
+      cy.tick(1000);
+    }
+    cy.get("@clear").click();
+    cy.get('div[data-testid = "circle_text_container"]').should(
+      "have.length",
+      0
+    );
   });
 });
