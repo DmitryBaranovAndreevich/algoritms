@@ -1,4 +1,12 @@
 import { Queue } from "../../src/services/";
+import {
+  CIRCLE_ATTRIBUTE,
+  DEFAULT_STYLE_COLOR,
+  CHANGING_STYLE_COLOR,
+  HEAD,
+  TAIL,
+  SLEEP_TIME,
+} from "./constans";
 
 describe("проверка анимации работы очереди", () => {
   before(function () {
@@ -31,43 +39,47 @@ describe("проверка анимации работы очереди", () => 
       arr.forEach((el, index) => {
         if (index === queue.tail) {
           el.get(`@${index + 1}`)
-            .should("have.text", ``)
-            .should("have.class", "circle_changing__uaqMc");
+            .should("have.text", "")
+            .invoke("attr", "class")
+            .should("contain", CHANGING_STYLE_COLOR);
           el.get(`@${index + 1}`)
             .next()
             .next()
-            .should("have.text", `tail`);
+            .should("have.text", TAIL);
         } else if (index === queue.head && index !== queue.tail) {
           el.get(`@${index + 1}`)
             .should("have.text", `${queueToArr[index]}`)
-            .should("have.class", "circle_default__lA5yg");
+            .invoke("attr", "class")
+            .should("contain", DEFAULT_STYLE_COLOR);
           el.get(`@${index + 1}`)
             .prev()
-            .should("have.text", `head`);
+            .should("have.text", HEAD);
         } else {
           el.get(`@${index + 1}`)
             .should(
               "have.text",
               `${queueToArr[index] ? queueToArr[index] : ""}`
             )
-            .should("have.class", "circle_default__lA5yg");
+            .invoke("attr", "class")
+            .should("contain", DEFAULT_STYLE_COLOR);
 
           el.get(`@${index + 1}`)
             .next()
-            .should("have.text", `${index}`);
+            .should("have.text", index);
         }
       });
       queue.enqueue(elToAdd);
       queueToArr = queue.getArr;
       arr = [];
-      cy.tick(500);
+      cy.tick(SLEEP_TIME);
 
       getArrElements(arr, count);
 
       arr.forEach((el, index) => {
         el.get(`@${index + 1}`)
           .should("have.text", `${queueToArr[index] ? queueToArr[index] : ""}`)
-          .should("have.class", "circle_default__lA5yg");
+          .invoke("attr", "class")
+          .should("contain", DEFAULT_STYLE_COLOR);
       });
     }
   });
@@ -85,35 +97,38 @@ describe("проверка анимации работы очереди", () => 
         if (index === queue.head) {
           el.get(`@${index + 1}`)
             .should("have.text", `${queueToArr[index]}`)
-            .should("have.class", "circle_changing__uaqMc");
+            .invoke("attr", "class")
+            .should("contain", CHANGING_STYLE_COLOR);
           el.get(`@${index + 1}`)
             .prev()
-            .should("have.text", `head`);
+            .should("have.text", HEAD);
         } else if (index === queue.tail && index !== head) {
           el.get(`@${index + 1}`)
-            .should("have.text", ``)
-            .should("have.class", "circle_default__lA5yg");
+            .should("have.text", "")
+            .invoke("attr", "class")
+            .should("contain", DEFAULT_STYLE_COLOR);
           el.get(`@${index + 1}`)
             .next()
             .next()
-            .should("have.text", `tail`);
+            .should("have.text", TAIL);
         } else {
           el.get(`@${index + 1}`)
             .should(
               "have.text",
               `${queueToArr[index] ? queueToArr[index] : ""}`
             )
-            .should("have.class", "circle_default__lA5yg");
+            .invoke("attr", "class")
+            .should("contain", DEFAULT_STYLE_COLOR);
 
           el.get(`@${index + 1}`)
             .next()
-            .should("have.text", `${index}`);
+            .should("have.text", index);
         }
       });
       queue.dequeue();
       queueToArr = queue.getArr;
       arr = [];
-      cy.tick(500);
+      cy.tick(SLEEP_TIME);
 
       getArrElements(arr, count);
 
@@ -125,19 +140,23 @@ describe("проверка анимации работы очереди", () => 
           );
           el.get(`@${index + 1}`)
             .prev()
-            .should("have.text", `head`);
+            .should("have.text", HEAD);
         }
         if (index === queue.tail) {
           cy.log(queue.tail, queue.head);
-          el.get(`@${index + 1}`).should("have.text", ``);
+          el.get(`@${index + 1}`).should("have.text", "");
           el.get(`@${index + 1}`)
             .next()
             .next()
-            .should("have.text", `${queue.tail === queue.head ? "" : tail}`);
+            .should(
+              "have.text",
+              `${queue.tail === queue.head ? "" : `${TAIL}`}`
+            );
         }
         el.get(`@${index + 1}`)
           .should("have.text", `${queueToArr[index] ? queueToArr[index] : ""}`)
-          .should("have.class", "circle_default__lA5yg");
+          .invoke("attr", "class")
+          .should("contain", DEFAULT_STYLE_COLOR);
       });
     }
   });
@@ -152,7 +171,7 @@ describe("проверка анимации работы очереди", () => 
       cy.get("@input").type(elToAdd);
       cy.get("@add").click();
       queue.enqueue(elToAdd);
-      cy.tick(500);
+      cy.tick(SLEEP_TIME);
     }
     queueToArr = queue.getArr;
     getArrElements(arr, count);
@@ -181,7 +200,7 @@ function getArrElements(arr, count) {
   for (let j = 0; j < count; j++) {
     arr.push(
       cy
-        .get('div[data-testid = "circle_text_container"]')
+        .get(CIRCLE_ATTRIBUTE)
         .eq(`${j}`)
         .as(`${j + 1}`)
     );

@@ -1,5 +1,7 @@
+import { CIRCLE_ATTRIBUTE, DEFAULT_STYLE_COLOR, SLEEP_TIME } from "./constans";
+
 describe("проверка анимации отрисовки ряда Фибоначи", () => {
-  const input = Math.floor(Math.random() * 19 + 1);
+  const input = Math.floor(Math.random() * 10 + 1);
   const arrFib = [
     1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584,
     4181,
@@ -21,21 +23,25 @@ describe("проверка анимации отрисовки ряда Фибо
   it("проверка анимации", () => {
     cy.clock();
     cy.get('button[data-testid = "button"]').click();
-    cy.tick(500);
-    cy.get('div[data-testid = "circle_text_container"]')
+
+    cy.tick(SLEEP_TIME);
+
+    cy.get(CIRCLE_ATTRIBUTE)
       .should("have.text", `${1}`)
-      .should("have.class", "circle_default__lA5yg");
-    cy.get('div[data-testid = "circle_text_container"]')
-      .next()
-      .should("have.text", `0`);
-    cy.tick(500);
+      .invoke("attr", "class")
+      .should("contain", DEFAULT_STYLE_COLOR);
+
+    cy.get(CIRCLE_ATTRIBUTE).next().should("have.text", `0`);
+
+    cy.tick(SLEEP_TIME);
+
     for (let i = 2; i < input; i++) {
       const arr = [];
 
       for (let j = 0; j < i; j++) {
         arr.push(
           cy
-            .get('div[data-testid = "circle_text_container"]')
+            .get(CIRCLE_ATTRIBUTE)
             .eq(`${j}`)
             .as(`${j + 1}`)
         );
@@ -44,13 +50,14 @@ describe("проверка анимации отрисовки ряда Фибо
       arr.forEach((el, index) => {
         el.get(`@${index + 1}`)
           .should("have.text", `${arrFib[index]}`)
-          .should("have.class", "circle_default__lA5yg");
+          .invoke("attr", "class")
+          .should("contain", DEFAULT_STYLE_COLOR);
         el.get(`@${index + 1}`)
           .next()
           .should("have.text", `${index}`);
       });
-      cy.tick(500);
+      cy.tick(SLEEP_TIME);
     }
-    cy.tick(500);
+    cy.tick(SLEEP_TIME);
   });
 });
