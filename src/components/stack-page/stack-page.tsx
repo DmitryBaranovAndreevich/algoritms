@@ -12,6 +12,7 @@ import { ArrStyles } from "../../types/arrStyles";
 export const StackPage: React.FC = () => {
   const { values, handleChange, setValues } = useForm({ inputString: "" });
   const [isDelete, setIsDelete] = useState(false);
+  const [isAdd, setIsAdd] = useState(false);
   const [stack, setStack] = useState(new Stack<string>(null));
   const [{ type, arr }, setArr] = useState<{
     type: string;
@@ -25,13 +26,15 @@ export const StackPage: React.FC = () => {
   }
 
   async function addNode() {
+    setIsAdd(true);
     const addValue = values.inputString;
     if (addValue !== "") stack.push(addValue);
     setValues({ inputString: "" });
     if (stack.getArr) {
       const arr = stack.getArr;
-      renderAnimation(arr, arr);
+     await renderAnimation(arr, arr);
     } else setArr({ type: ArrStyles.default, arr: [] });
+    setIsAdd(false);
   }
 
   async function delNode() {
@@ -41,13 +44,12 @@ export const StackPage: React.FC = () => {
     if (stack.getArr) {
       const arr = stack.getArr;
       await renderAnimation(cloneArr, arr);
-      setIsDelete(false);
     } else {
       await renderAnimation(cloneArr, []);
       await sleep();
       setArr({ type: ArrStyles.default, arr: [] });
-      setIsDelete(false);
     }
+     setIsDelete(false);
   }
 
   function clear() {
@@ -74,12 +76,14 @@ export const StackPage: React.FC = () => {
             text={"Добавить"}
             onClick={addNode}
             disabled={values.inputString === "" ? true : false}
+            isLoader={isAdd}
           ></Button>
           <Button
             type={"button"}
             text={"Удалить"}
             onClick={delNode}
             disabled={stack.isEmpty || isDelete}
+            isLoader={isDelete}
           ></Button>
         </div>
         <Button
