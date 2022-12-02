@@ -61,7 +61,7 @@ export const QueuePage: React.FC = () => {
 
   return (
     <SolutionLayout title="Очередь">
-      <form className={styles.wrapper}>
+      <form className={styles.wrapper} onSubmit={(e) => e.preventDefault()}>
         <div className={styles.container}>
           <Input
             type={"text"}

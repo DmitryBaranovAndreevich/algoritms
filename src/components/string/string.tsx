@@ -13,7 +13,7 @@ import { useStateIfMounted } from "use-state-if-mounted";
 
 export const StringComponent: React.FC = () => {
   const [isAnimation, setIsAnimation] = useStateIfMounted(false);
-  const { values, handleChange } = useForm({ inputString: "" });
+  const { values, handleChange,setValues } = useForm({ inputString: "" });
   const [{ type, data, arr }, setArr] = useStateIfMounted<TAnimation<string>>({
     type: ArrStyles.default,
     data: [],
@@ -24,6 +24,7 @@ export const StringComponent: React.FC = () => {
     e.preventDefault();
     setIsAnimation(true);
     const wordToArr = values.inputString.split("");
+    setValues({inputString: "" })
     if (wordToArr.length > 1) {
       setArr({ type: ArrStyles.default, data: [], arr: wordToArr });
       let animations = getAnimations(wordToArr);
@@ -45,6 +46,7 @@ export const StringComponent: React.FC = () => {
           onChange={handleChange}
           name={"inputString"}
           isLimitText={true}
+          value={values.inputString}
         ></Input>
         <Button
           type={"submit"}

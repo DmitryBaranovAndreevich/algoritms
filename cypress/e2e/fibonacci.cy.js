@@ -7,7 +7,7 @@ describe("проверка анимации отрисовки ряда Фибо
     4181,
   ];
   before(function () {
-    cy.visit("http://localhost:3000");
+    cy.visit("");
     cy.get(`a[href = "/fibonacci"]`).click();
   });
 

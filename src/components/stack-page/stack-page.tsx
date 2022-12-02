@@ -57,7 +57,7 @@ export const StackPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Стек">
-      <form className={styles.wrapper}>
+      <form className={styles.wrapper} onSubmit={(e) => e.preventDefault()}>
         <div className={styles.container}>
           <Input
             type={"text"}

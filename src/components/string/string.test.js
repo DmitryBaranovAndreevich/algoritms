@@ -24,7 +24,6 @@ function checkResponce(container, inputValue) {
       const letter = el.textContent;
       return priv + letter;
     }, "");
-    console.log(word)
     expect(word).toBe([...inputValue].reverse().join(""));
   }
 }

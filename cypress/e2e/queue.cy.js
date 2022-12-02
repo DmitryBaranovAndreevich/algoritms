@@ -10,7 +10,7 @@ import {
 
 describe("проверка анимации работы очереди", () => {
   before(function () {
-    cy.visit("http://localhost:3000");
+    cy.visit("");
     cy.get(`a[href = "/queue"]`).click();
   });
 

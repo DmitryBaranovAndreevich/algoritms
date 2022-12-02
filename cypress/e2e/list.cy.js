@@ -10,7 +10,7 @@ import {
 
 describe("проверка анимации работы списка", () => {
   before(function () {
-    cy.visit("http://localhost:3000");
+    cy.visit("");
     cy.get(`a[href = "/list"]`).click();
   });
 

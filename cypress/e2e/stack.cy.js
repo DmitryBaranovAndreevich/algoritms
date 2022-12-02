@@ -10,7 +10,7 @@ describe("проверка анимации работы стека", () => {
   const count = 6;
   const stack = [];
   before(function () {
-    cy.visit("http://localhost:3000");
+    cy.visit("");
     cy.get(`a[href = "/stack"]`).click();
   });
 

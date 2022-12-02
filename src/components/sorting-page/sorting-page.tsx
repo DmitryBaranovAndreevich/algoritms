@@ -68,6 +68,7 @@ export const SortingPage: React.FC = () => {
             name={"radio"}
             onChange={handleChange}
             extraClass={SortTypes.choice}
+            value={checkedInput}
           ></RadioInput>
           <RadioInput
             label={"Пузырёк"}
@@ -75,6 +76,7 @@ export const SortingPage: React.FC = () => {
             name={"radio"}
             onChange={handleChange}
             extraClass={SortTypes.bubble}
+            value={checkedInput}
           ></RadioInput>
           <div className={styles.buttonContainer}>
             <Button

@@ -1,6 +1,6 @@
 describe("проверка роутинга на странице", function () {
   before(function () {
-    cy.visit("http://localhost:3000");
+    cy.visit("");
   });
 
   it("должна быть открыта главная страница", function () {
