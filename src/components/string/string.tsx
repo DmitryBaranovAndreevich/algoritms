@@ -9,11 +9,12 @@ import { ElementStates } from "../../types/element-states";
 import { getAnimations, parseAnimations } from "../../services";
 import { TAnimation } from "../../types/animation";
 import { ArrStyles } from "../../types/arrStyles";
+import { useStateIfMounted } from "use-state-if-mounted";
 
 export const StringComponent: React.FC = () => {
-  const [isAnimation, setIsAnimation] = useState(false);
-  const { values, handleChange } = useForm({ inputString: "" });
-  const [{ type, data, arr }, setArr] = useState<TAnimation<string>>({
+  const [isAnimation, setIsAnimation] = useStateIfMounted(false);
+  const { values, handleChange,setValues } = useForm({ inputString: "" });
+  const [{ type, data, arr }, setArr] = useStateIfMounted<TAnimation<string>>({
     type: ArrStyles.default,
     data: [],
     arr: [],
@@ -23,6 +24,7 @@ export const StringComponent: React.FC = () => {
     e.preventDefault();
     setIsAnimation(true);
     const wordToArr = values.inputString.split("");
+    setValues({inputString: "" })
     if (wordToArr.length > 1) {
       setArr({ type: ArrStyles.default, data: [], arr: wordToArr });
       let animations = getAnimations(wordToArr);
@@ -44,14 +46,16 @@ export const StringComponent: React.FC = () => {
           onChange={handleChange}
           name={"inputString"}
           isLimitText={true}
+          value={values.inputString}
         ></Input>
         <Button
           type={"submit"}
           text={"Развернуть"}
           isLoader={isAnimation}
+          disabled={values.inputString !== "" ? false : true}
         ></Button>
       </form>
-      <div className={styles.container}>
+      <div className={styles.container} data-testid={"string-container"}>
         {arr?.map((el, index) => {
           const [l, r] = data;
           let color = ElementStates.Default;

@@ -8,7 +8,7 @@ import { useForm } from "../../hooks/useForm";
 import { fibonacci, sleep } from "../../services";
 
 export const FibonacciPage: React.FC = () => {
-  const { values, handleChange } = useForm<number>({ inputNumber: 0 });
+  const { values, handleChange, setValues } = useForm<number>({ inputNumber: 0 });
   const [isAnimation, setIsAnimation] = useState(false);
   const [arr, setArr] = useState<Array<number>>([]);
 
@@ -17,6 +17,7 @@ export const FibonacciPage: React.FC = () => {
     setArr([]);
     setIsAnimation(true);
     await fibAnimation(values.inputNumber);
+    setValues({ inputNumber: 0 });
     setIsAnimation(false);
   }
 
@@ -40,13 +41,14 @@ export const FibonacciPage: React.FC = () => {
           onChange={handleChange}
           name={"inputNumber"}
           isLimitText={true}
+          value={values.inputNumber === 0? '' : values.inputNumber}
         ></Input>
         <Button
           type={"submit"}
           text={"Раccчитать"}
           isLoader={isAnimation}
           disabled={
-            values.inputNumber > 19 || values.inputNumber < 0 ? true : false
+            values.inputNumber > 19 || values.inputNumber <= 0 ? true : false
           }
         ></Button>
       </form>
